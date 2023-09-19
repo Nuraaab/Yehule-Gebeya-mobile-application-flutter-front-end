@@ -1,0 +1,14 @@
+const baseUrl = "http://dailymart.ab-ig.com/api";
+const loginUrl = "$baseUrl/auth/login";
+const addSalesUrl = "$baseUrl/ApiSales";
+const itemsUrl = "$baseUrl/item";
+const customerUrl = "$baseUrl/agent";
+const logoutUrl ="$baseUrl/logout";
+const salesUrl ="$baseUrl/AgentSales";
+const addCustomer = "$baseUrl/auth/createCustomer";
+const updateCustomerUrl = "$baseUrl/auth/updateCustomer";
+const passError = "Credentials not correct";
+const emailError = "Unregisterd user";
+const serverError = "Server Error";
+const loginSuccess = "You are logged in successfully!";
+const success = "Successfully";
