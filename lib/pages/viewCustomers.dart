@@ -3,6 +3,7 @@ import 'package:testing1213/models/apiResponse.dart';
 import 'package:testing1213/pages/ViewSales.dart';
 import 'package:testing1213/pages/addCustomer.dart';
 import 'package:testing1213/pages/connectionError.dart';
+import 'package:testing1213/service/services.dart';
 import 'package:testing1213/service/user_service.dart';
 import 'package:testing1213/widget/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,8 @@ class _ViewCustomersState extends State<ViewCustomers> {
     ),
   ) :
   isEmptyData
-      ? Scaffold(
+      ?
+  Scaffold(
     body: Container(
       margin: EdgeInsets.only(left: 10, right: 10),
       child: Column(
@@ -119,94 +121,94 @@ class _ViewCustomersState extends State<ViewCustomers> {
         ],
       ),),
   ):
-      Scaffold(
-        drawer: NavigationDrawerWidget(),
-        appBar: AppBar(
-          elevation: 0,
-          title:  Text('Customers',
-            style: MyText.body1(context)!.copyWith(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w500
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: MyColors.primary,
-          foregroundColor: Colors.white,
+  Scaffold(
+    drawer: NavigationDrawerWidget(),
+    appBar: AppBar(
+      elevation: 0,
+      title:  Text('Customers',
+        style: MyText.body1(context)!.copyWith(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500
         ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTableTheme(
-              data: DataTableThemeData(
-                dataRowHeight: 56.0,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.grey[400]!,
-                      width: 2.0,
+      ),
+      centerTitle: true,
+      backgroundColor: MyColors.primary,
+      foregroundColor: Colors.white,
+    ),
+    body: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTableTheme(
+          data: DataTableThemeData(
+            dataRowHeight: 56.0,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey[400]!,
+                  width: 2.0,
+                ),
+              ),
+            ),
+            headingRowColor: MaterialStateProperty.all(Colors.grey[300]),
+            dataRowColor: MaterialStateProperty.all(Colors.white),
+            dividerThickness: 3,
+          ), child: DataTable(
+          columns: [
+            DataColumn(label: Text('Name', style: MyText.subhead(context)!.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.w500
+            ),)),
+            DataColumn(label: Text('Phone Number', style: MyText.subhead(context)!.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.w500
+            ),)),
+            DataColumn(label: Text('Tin Number', style: MyText.subhead(context)!.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.w500
+            ),)),
+            DataColumn(label: Text('Action', style: MyText.subhead(context)!.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.w500
+            ),)),
+          ],
+          rows: _customers.map((cust) {
+            return DataRow(
+                cells: [
+                  DataCell(Text(cust['name'].toString() ,
+                    style: MyText.body1(context)!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500
                     ),
                   ),
-                ),
-                headingRowColor: MaterialStateProperty.all(Colors.grey[300]),
-                dataRowColor: MaterialStateProperty.all(Colors.white),
-                dividerThickness: 3,
-              ), child: DataTable(
-              columns: [
-                DataColumn(label: Text('Name', style: MyText.subhead(context)!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500
-                ),)),
-                DataColumn(label: Text('Phone Number', style: MyText.subhead(context)!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500
-                ),)),
-                DataColumn(label: Text('Tin Number', style: MyText.subhead(context)!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500
-                ),)),
-                DataColumn(label: Text('Action', style: MyText.subhead(context)!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500
-                ),)),
-              ],
-              rows: _customers.map((cust) {
-                return DataRow(
-                    cells: [
-                      DataCell(Text(cust['name'].toString() ,
-                        style: MyText.body1(context)!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      ),
-                      DataCell(Text(cust['phone_number'].toString() ,
-                        style: MyText.body1(context)!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      ),
-                      DataCell(Text(cust['tin_number'].toString() ,
-                        style: MyText.body1(context)!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      ),
-                      DataCell(IconButton(onPressed: () async{
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        prefs.setBool('editcust', true);
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => AddCustomer(customer: cust,)));
-                        print('customer data: $cust');
-                      }, icon: Icon(Icons.edit, color: Colors.black,),)),
-                    ]);
-              }).toList(),
+                  ),
+                  DataCell(Text(cust['phone_number'].toString() ,
+                    style: MyText.body1(context)!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  ),
+                  DataCell(Text(cust['tin_number'].toString() ,
+                    style: MyText.body1(context)!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  ),
+                  DataCell(IconButton(onPressed: () async{
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('editcust', true);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => AddCustomer(customer: cust,)));
+                    print('customer data: $cust');
+                  }, icon: Icon(Icons.edit, color: Colors.black,),)),
+                ]);
+          }).toList(),
 
-            ),
-            ),
-          ),
         ),
-      );
+        ),
+      ),
+    ),
+  );
 }

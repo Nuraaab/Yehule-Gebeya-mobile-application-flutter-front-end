@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:testing1213/service/constant.dart';
+import 'package:testing1213/constant/constant.dart';
 import '../models/apiResponse.dart';
 
 Future<ApiResponse> login(String email, String password) async {
@@ -206,10 +206,10 @@ Future<ApiResponse> addCustomers(var body, String? token, int? user_id) async {
 }
 
 
-Future<ApiResponse>  updateCustomers(var body, String? token, int? user_id) async {
+Future<ApiResponse>  updateCustomers(var body, String? token, String? customer_id) async {
   ApiResponse updateCustomerResponse = ApiResponse();
 try{
-  final response = await http.put(Uri.parse('$updateCustomerUrl/$user_id'),
+  final response = await http.put(Uri.parse('$updateCustomerUrl/$customer_id'),
     body: body,
     headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
   );

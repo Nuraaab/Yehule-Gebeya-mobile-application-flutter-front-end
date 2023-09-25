@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:testing1213/pages/addCustomer.dart';
+import 'package:testing1213/service/services.dart';
 import 'package:testing1213/widget/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,104 +65,109 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         setState(() {
           _isLoggedOut = false;
         });
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: HomePage(),)));
+        snackBar.show(
+            context,"Something went wrong. Please try again", Colors.red);
       }
     }else{
       setState(() {
         _isLoggedOut = false;
       });
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: HomePage(),)));
+      snackBar.show(
+          context,"Something went wrong. Please try again", Colors.red);
     }
   }
    @override
-  Widget build(BuildContext context)=>Drawer(
-    child: SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height:250,
-              child: Stack(
-                children: <Widget>[
-                  Image.asset(
-                    Img.get('image_slider3.jpg'),
-                    height: double.infinity,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: Text("Home" ,
-                  style: MyText.subhead(context)!.copyWith(
-                      color: Colors.black,   fontWeight: FontWeight.w500)),
-              leading: const Icon(Icons.home, size: 25.0, color: Colors.black,),
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomePage()));
-              },
-            ),
-            ListTile(
-              title: Text("View Sales" ,
-                  style: MyText.subhead(context)!.copyWith(
-                      color: Colors.black,   fontWeight: FontWeight.w500)),
-              leading: const Icon(Icons.bar_chart, size: 25.0, color: Colors.black,),
-              onTap: () {
-                _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> ViewSalesPage())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
-              },
-            ),
-            ListTile(
-              title: Text("Add Sales" ,
-                  style: MyText.subhead(context)!.copyWith(
-                      color: Colors.black,   fontWeight: FontWeight.w500)),
-              leading: const Icon(Icons.add_outlined, size: 25.0, color: Colors.black,),
-              onTap: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setBool('edit', false);
-                _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AddSales())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
-              },
-            ),
-            ListTile(
-              title: Text("Add Customers" ,
-                  style: MyText.subhead(context)!.copyWith(
-                      color: Colors.black,   fontWeight: FontWeight.w500)),
-              leading: const Icon(Icons.add_outlined, size: 25.0, color: Colors.black,),
-              onTap: () async {
-                _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AddCustomer())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
-              },
-            ),
-            ListTile(
-              title: Text("View Customers" ,
-                  style: MyText.subhead(context)!.copyWith(
-                      color: Colors.black,   fontWeight: FontWeight.w500)),
-              leading: const Icon(Icons.people_outline_outlined, size: 25.0, color: Colors.black,),
-              onTap: () {
-                _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const ViewCustomers())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
-              },
-            ),
-            const Padding(
-              padding: EdgeInsets.only(right: 50),
-              child: Divider(color: Colors.black, thickness: 1,),
-            ),
-            ListTile(
-              title: Text(_isLoggedIn ? "Logout" : 'Login' ,
-                  style: MyText.subhead(context)!.copyWith(
-                      color: Colors.black,   fontWeight: FontWeight.w500)),
-              leading: const Icon(Icons.logout_outlined, size: 25.0, color: Colors.black,),
-              onTap: () {
-                _isLoggedIn ? _logout() :
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const LoginAndSignUpCard()));
-              },
-            ),
-            SizedBox(height: 5,),
-            if (_isLoggedOut)
-              Container(
-                width: double.infinity,
-                height: 36,
-                child: const Center(
-                  child: CircularProgressIndicator(color: MyColors.primary,),
+  Widget build(BuildContext context)=>WillPopScope(
+    onWillPop: () => Services.onBackPressed(context),
+    child: Drawer(
+      child: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height:250,
+                child: Stack(
+                  children: <Widget>[
+                    Image.asset(
+                      Img.get('image_slider3.jpg'),
+                      height: double.infinity,
+                      fit: BoxFit.fill,
+                    ),
+                  ],
                 ),
               ),
-          ],
+              ListTile(
+                title: Text("Home" ,
+                    style: MyText.subhead(context)!.copyWith(
+                        color: Colors.black,   fontWeight: FontWeight.w500)),
+                leading: const Icon(Icons.home, size: 25.0, color: Colors.black,),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomePage()));
+                },
+              ),
+              ListTile(
+                title: Text("View Sales" ,
+                    style: MyText.subhead(context)!.copyWith(
+                        color: Colors.black,   fontWeight: FontWeight.w500)),
+                leading: const Icon(Icons.bar_chart, size: 25.0, color: Colors.black,),
+                onTap: () {
+                  _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> ViewSalesPage())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
+                },
+              ),
+              ListTile(
+                title: Text("Add Sales" ,
+                    style: MyText.subhead(context)!.copyWith(
+                        color: Colors.black,   fontWeight: FontWeight.w500)),
+                leading: const Icon(Icons.add_outlined, size: 25.0, color: Colors.black,),
+                onTap: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('edit', false);
+                  _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AddSales())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
+                },
+              ),
+              ListTile(
+                title: Text("Add Customers" ,
+                    style: MyText.subhead(context)!.copyWith(
+                        color: Colors.black,   fontWeight: FontWeight.w500)),
+                leading: const Icon(Icons.add_outlined, size: 25.0, color: Colors.black,),
+                onTap: () async {
+                  _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> AddCustomer())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
+                },
+              ),
+              ListTile(
+                title: Text("View Customers" ,
+                    style: MyText.subhead(context)!.copyWith(
+                        color: Colors.black,   fontWeight: FontWeight.w500)),
+                leading: const Icon(Icons.people_outline_outlined, size: 25.0, color: Colors.black,),
+                onTap: () {
+                  _isLoggedIn ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const ViewCustomers())) : Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> LoginAndSignUpCard()));
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.only(right: 50),
+                child: Divider(color: Colors.black, thickness: 1,),
+              ),
+              ListTile(
+                title: Text(_isLoggedIn ? "Logout" : 'Login' ,
+                    style: MyText.subhead(context)!.copyWith(
+                        color: Colors.black,   fontWeight: FontWeight.w500)),
+                leading: const Icon(Icons.logout_outlined, size: 25.0, color: Colors.black,),
+                onTap: () {
+                  _isLoggedIn ? _logout() :
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const LoginAndSignUpCard()));
+                },
+              ),
+              SizedBox(height: 5,),
+              if (_isLoggedOut)
+                Container(
+                  width: double.infinity,
+                  height: 36,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: MyColors.primary,),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     ),

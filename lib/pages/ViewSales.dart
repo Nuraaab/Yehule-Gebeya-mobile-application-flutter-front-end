@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testing1213/data/img.dart';
 import 'package:testing1213/models/apiResponse.dart';
 import 'package:testing1213/pages/addSales.dart';
-import 'package:testing1213/service/constant.dart';
+import 'package:testing1213/constant/constant.dart';
+import 'package:testing1213/service/services.dart';
 import 'package:testing1213/service/user_service.dart';
 import '../data/my_colors.dart';
 import '../widget/my_text.dart';
@@ -99,89 +100,83 @@ class _ViewSalesPageState extends State<ViewSalesPage> {
       );
     } else {
       return Scaffold(
-        drawer: const NavigationDrawerWidget(),
-        appBar: AppBar(
-          elevation: 0,
-          title: Text('Sales',
+          drawer: const NavigationDrawerWidget(),
+          appBar: AppBar(
+            elevation: 0,
+            title: Text('Sales',
               style: MyText.body1(context)!.copyWith(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w500
               ),
+            ),
+            centerTitle: true,
+            backgroundColor: MyColors.primary,
+            foregroundColor: Colors.white,
           ),
-          centerTitle: true,
-          backgroundColor: MyColors.primary,
-          foregroundColor: Colors.white,
-        ),
-        body: salesData.isEmpty ?  Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text( 'Looks like there is no sales yet. Add a new one by clicking here.', textAlign: TextAlign.center, style: MyText.subhead(context)!.copyWith(
-                  color: Colors.black,  fontWeight: FontWeight.w400),),
-              SizedBox(height: 20,),
-              GestureDetector(
-                onTap: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setBool('edit', false);
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => AddSales()));
-                },
-                child: Container(
-                  width: 250,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: MyColors.primary,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add,color: Colors.white, size: 25,),
-                      SizedBox(width: 10,),
-                      Text( 'Add New Sales', style: MyText.subhead(context)!.copyWith(
-                          color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500)),
-                    ],
+          body: salesData.isEmpty ?  Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text( 'Looks like there is no sales yet. Add a new one by clicking here.', textAlign: TextAlign.center, style: MyText.subhead(context)!.copyWith(
+                    color: Colors.black,  fontWeight: FontWeight.w400),),
+                SizedBox(height: 20,),
+                GestureDetector(
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('edit', false);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => AddSales()));
+                  },
+                  child: Container(
+                    width: 250,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: MyColors.primary,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add,color: Colors.white, size: 25,),
+                        SizedBox(width: 10,),
+                        Text( 'Add New Sales', style: MyText.subhead(context)!.copyWith(
+                            color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500)),
+                      ],
+                    ),
                   ),
                 ),
+              ],
+            ),) :
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[500],
+                border: Border(
+                  bottom: BorderSide(color: Colors.white, width: 3),
+                ), // Set the border color and width
               ),
-            ],
-          ),) :
-        SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[500],
-              border: Border(
-                bottom: BorderSide(color: Colors.white, width: 3),
-              ), // Set the border color and width
-            ),
-            child: ExpansionPanelList.radio(
-              expandedHeaderPadding: EdgeInsets.all(0.0),
-              elevation: 0,
-              children: uniqueCustomers.map<ExpansionPanelRadio>((customerName) {
-                List<dynamic> sales = salesData.where((e) => e['customer_name'] == customerName).toList();
-                return ExpansionPanelRadio(
-                  backgroundColor: Colors.grey[500],
-                  canTapOnHeader: true,
-                  value: customerName, // Use customerName as the unique identifier
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      title: Text(customerName,
-                        style: MyText.body1(context)!.copyWith(
-                            color: Colors.black.withOpacity(0.7),
-                            fontWeight: FontWeight.w500
+              child: ExpansionPanelList.radio(
+                expandedHeaderPadding: EdgeInsets.all(0.0),
+                elevation: 0,
+                children: uniqueCustomers.map<ExpansionPanelRadio>((customerName) {
+                  List<dynamic> sales = salesData.where((e) => e['customer_name'] == customerName).toList();
+                  return ExpansionPanelRadio(
+                    backgroundColor: Colors.white,
+                    canTapOnHeader: true,
+                    value: customerName, // Use customerName as the unique identifier
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text(customerName,
+                          style: MyText.body1(context)!.copyWith(
+                              color: Colors.black.withOpacity(0.7),
+                              fontWeight: FontWeight.w500
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  body: Container(
-                    decoration: BoxDecoration(
-                      border: Border(// Set the border color between ListTiles
-                        bottom: BorderSide(color: Colors.white), // Set the border color between ListTiles
-                      ),
-                    ),
-                    child: Column(
+                      );
+                    },
+                    body: Column(
                       children: [
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
@@ -225,7 +220,7 @@ class _ViewSalesPageState extends State<ViewSalesPage> {
                                             fontWeight: FontWeight.w500
                                         ),
                                       ), ),
-                                      DataCell(Text('/ ${sale['item_name'].toString()}',
+                                      DataCell(Text('${sale['item_code'].toString()}/ ${sale['item_name'].toString()}',
                                         style: MyText.body1(context)!.copyWith(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w500
@@ -255,12 +250,11 @@ class _ViewSalesPageState extends State<ViewSalesPage> {
                         ),
                       ],
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        )
+          )
       );
     }
   }

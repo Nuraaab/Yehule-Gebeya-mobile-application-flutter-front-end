@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:testing1213/data/my_colors.dart';
 import 'package:testing1213/models/apiResponse.dart';
+import 'package:testing1213/service/services.dart';
 import 'package:testing1213/service/user_service.dart';
 import 'package:testing1213/widget/navigation_drawer.dart';
 import 'package:geolocator/geolocator.dart';
@@ -191,7 +192,8 @@ class _AddSalesState extends State<AddSales> {
               _item_code = ItemData['item_code'].toString();
               print('item code :${_item_code}');
             } else {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+              snackBar.show(
+                  context,"Something went wrong. Please try again", Colors.red);
               isAddingOrUpdating = false;
             }
             var body = jsonEncode({
@@ -210,19 +212,23 @@ class _AddSalesState extends State<AddSales> {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (_) => ViewSalesPage()));
             } else {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+              snackBar.show(
+                  context,"Something went wrong. Please try again", Colors.red);
               isAddingOrUpdating = false;
             }
           } else {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+            snackBar.show(
+                context,"Something went wrong. Please try again", Colors.red);
             isAddingOrUpdating = false;
           }
         } else {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+          snackBar.show(
+              context,"Something went wrong. Please try again", Colors.red);
           isAddingOrUpdating = false;
         }
       } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+        snackBar.show(
+            context,"Something went wrong. Please try again", Colors.red);
         isAddingOrUpdating = false;
       }
     }
@@ -264,7 +270,8 @@ class _AddSalesState extends State<AddSales> {
             _cust_id = customerData['id'];
           }else{
             isAddingOrUpdating = false;
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+            snackBar.show(
+                context,"Something went wrong. Please try again", Colors.red);
           }
           ApiResponse itemResponse = await getItems(token);
           if(itemResponse.error == null){
@@ -276,7 +283,8 @@ class _AddSalesState extends State<AddSales> {
               _uitem_code = ItemData['item_code'].toString();
             }else{
               isAddingOrUpdating = false;
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+              snackBar.show(
+                  context,"Something went wrong. Please try again", Colors.red);
             }
             var body = jsonEncode({
               "sales_id": widget.sales_id,
@@ -297,19 +305,23 @@ class _AddSalesState extends State<AddSales> {
             }else{
               print(updateResponse.error);
               isAddingOrUpdating = false;
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+              snackBar.show(
+                  context,"Something went wrong. Please try again", Colors.red);
             }
           }else{
             isAddingOrUpdating = false;
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+            snackBar.show(
+                context,"Something went wrong. Please try again", Colors.red);
           }
         }else{
           isAddingOrUpdating = false;
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+          snackBar.show(
+              context,"Something went wrong. Please try again", Colors.red);
         }
       }else{
         isAddingOrUpdating = false;
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: AddSales(),)));
+        snackBar.show(
+            context,"Something went wrong. Please try again", Colors.red);
       }
     }
   }
@@ -381,7 +393,8 @@ class _AddSalesState extends State<AddSales> {
     ),
   ) :
   (isEmptyData)
-      ? Scaffold(
+      ?
+  Scaffold(
     body: Container(
       margin: EdgeInsets.only(left: 10, right: 10),
       child: Column(
@@ -416,361 +429,361 @@ class _AddSalesState extends State<AddSales> {
       ),),
   ):
   Scaffold(
-        drawer: const NavigationDrawerWidget(),
-        appBar: AppBar(
-          elevation: 0,
-          title:  Text(_isEdditingMode ? 'Update Sales' : 'Add Sales',
-            style: MyText.body1(context)!.copyWith(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w500
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: MyColors.primary,
-          foregroundColor: Colors.white,
+    drawer: const NavigationDrawerWidget(),
+    appBar: AppBar(
+      elevation: 0,
+      title:  Text(_isEdditingMode ? 'Update Sales' : 'Add Sales',
+        style: MyText.body1(context)!.copyWith(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500
         ),
-        body:  SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          scrollDirection: Axis.vertical,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(height: 35),
-                  Padding(
-                    padding:  EdgeInsets.only(bottom: 10.0),
-                    child: TextField(
-                      obscureText: false,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.date_range_outlined , color: MyColors.iconColor,),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: MyColors.textColor1,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: MyColors.textColor1,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding: EdgeInsets.all(15),
-                        hintText: _isEdditingMode ? ('${forintializaton.toString()}'): ('${forintializaton == null ? formattedDate : forintializaton.toString()}'),
-                        hintStyle:  MyText.body1(context)!.copyWith(
-                          color: MyColors.textColor1,
-                          fontWeight: FontWeight.w500
+      ),
+      centerTitle: true,
+      backgroundColor: MyColors.primary,
+      foregroundColor: Colors.white,
+    ),
+    body:  SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      scrollDirection: Axis.vertical,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(height: 35),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 10.0),
+                child: TextField(
+                  obscureText: false,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.date_range_outlined , color: MyColors.iconColor,),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MyColors.textColor1,
                       ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MyColors.textColor1,
                       ),
-                      onTap: () async {
-                        late DateTime parsedFetchedDate = dateFormat.parse(forintializaton!);
-                        DateTime? newdate = await showDatePicker(
-                            context: context,
-                            initialDate: _isEdditingMode ? parsedFetchedDate :DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime(2100));
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: _isEdditingMode ? ('${forintializaton.toString()}'): ('${forintializaton == null ? formattedDate : forintializaton.toString()}'),
+                    hintStyle:  MyText.body1(context)!.copyWith(
+                        color: MyColors.textColor1,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  onTap: () async {
+                    late DateTime parsedFetchedDate = dateFormat.parse(forintializaton!);
+                    DateTime? newdate = await showDatePicker(
+                        context: context,
+                        initialDate: _isEdditingMode ? parsedFetchedDate :DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100));
 
-                        if (newdate == null) {
-                          DateTime currentDate = DateTime.now();
-                          late String formattedDate = dateFormat.format(currentDate);
-                          setState(() {
-                            forintializaton = formattedDate;
-                          });
-                        }else{
-                          setState(() {
-                            DateTime currentDate = DateTime.now();
-                            DateTime currentDateWithTime = newdate;
-                            DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-                            late String formattedDate = dateFormat.format(currentDateWithTime);
-                            if(newdate.isBefore(currentDate)){
-                              _isPast = true;
-                            }else {
-                              _isPast = false;
-                            }
-                            forintializaton = formattedDate;
-                            print('date: ${forintializaton.toString()} ${formattedDate}');
-                          });
+                    if (newdate == null) {
+                      DateTime currentDate = DateTime.now();
+                      late String formattedDate = dateFormat.format(currentDate);
+                      setState(() {
+                        forintializaton = formattedDate;
+                      });
+                    }else{
+                      setState(() {
+                        DateTime currentDate = DateTime.now();
+                        DateTime currentDateWithTime = newdate;
+                        DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+                        late String formattedDate = dateFormat.format(currentDateWithTime);
+                        if(newdate.isBefore(currentDate)){
+                          _isPast = true;
+                        }else {
+                          _isPast = false;
                         }
+                        forintializaton = formattedDate;
+                        print('date: ${forintializaton.toString()} ${formattedDate}');
+                      });
+                    }
 
+                  },
+                ),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 10.0),
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  height: 47,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: MyColors.textColor1,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      items: _custName.map<DropdownMenuItem<String>>((dynamic items) {
+                        return DropdownMenuItem<String>(
+                          alignment: AlignmentDirectional.centerStart,
+                          value: items.toString(),
+                          child: Container(
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
+                              ),
+                            ),
+                            child: Text(
+                              items.toString(),
+                              style: MyText.body1(context)!.copyWith(
+                                  color: MyColors.textColor1,
+                                  fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      value: _isCustChanged ? _customernamecontroller : null, // Set value to null if _customernamecontroller is empty
+                      onChanged: (_customernamecontroller) {
+                        setState(() {
+                          this._customernamecontroller = _customernamecontroller;
+                          print('selected cust${_itemnamecontroller}');
+                          _isCustChanged = true;
+                        });
+                      },
+                      hint: Text(_isEdditingMode ? '${widget.customerName}' : 'Customer Name',
+                        style: MyText.body1(context)!.copyWith(
+                            color: MyColors.textColor1,
+                            fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      isExpanded: true,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 10.0),
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  height: 47,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: MyColors.textColor1,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      items:_itemsName.map<DropdownMenuItem<String>>((dynamic items) {
+                        return DropdownMenuItem<String>(
+                          value: items.toString(),
+                          child: Container(
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
+                              ),
+                            ),
+                            child: Text(
+                              items.toString(),
+                              style: MyText.body1(context)!.copyWith(
+                                  color: MyColors.textColor1,
+                                  fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      style: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      value: _isItemeChanged ? _itemnamecontroller : null,
+                      onChanged: ( _itemnamecontroller) {
+                        setState(() {
+                          this._itemnamecontroller = _itemnamecontroller;
+                          _isItemeChanged = true;
+                          print('item name ${this._itemnamecontroller}');
+                        });
+                      },
+                      hint: Text(_isEdditingMode ? '${_itemnamecontroller}' : 'Item Name',
+                        style: MyText.body1(context)!.copyWith(
+                            color: MyColors.textColor1,
+                            fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      isExpanded: true,
+                    ),
+
+                  ),
+                ),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 10.0),
+                child: TextField(
+                  controller: _quantitycontroller,
+                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.format_list_numbered , color: MyColors.iconColor,),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MyColors.textColor1,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MyColors.textColor1,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: _isEdditingMode ? _quantitycontroller.text : 'Quantity' ,
+                    hintStyle: MyText.body1(context)!.copyWith(
+                        color: MyColors.textColor1,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+
+                  style: MyText.body1(context)!.copyWith(
+                    color: MyColors.textColor1,
+                    fontWeight: FontWeight.w500,
+                  ),
+
+                ),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(bottom: 10.0),
+                child: TextField(
+                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons. location_on, color: MyColors.iconColor,),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MyColors.textColor1,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: MyColors.textColor1,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: _isEdditingMode ? _locationcontroller : ((_latitude.isEmpty) ?  'Location' : '${_latitude},${_longtude}') ,
+                    hintStyle: MyText.body1(context)!.copyWith(
+                        color: MyColors.textColor1,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+
+                ),
+              ),
+
+              _isEdditingMode ? GestureDetector(
+                onTap: ()  {
+                  _getLocation().then((value){
+                    setState(() {
+                      _locationcontroller = '${_latitude},${_longtude}';
+                      _isLocationLoaded =false;
+                    });
+                  });
+                },
+                child: _isLocationLoaded ? Container(
+                  width: 500,
+                  height: 36,
+                  child: Center(
+                    child: CircularProgressIndicator(color: MyColors.primary,),
+                  ),
+                ) :Row(
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      margin: EdgeInsets.only(left: 30),
+                      decoration: BoxDecoration(
+                        color: MyColors.textColor2,
+                        border: Border.all(width: 1, color:  MyColors.textColor1),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Icon(Icons.location_on_outlined, color: Colors.white ),
+                    ),
+                    SizedBox(width: 5,),
+                    Text('Update Location', style: MyText.body1(context)!.copyWith(
+                        color: MyColors.textColor1,
+                        fontWeight: FontWeight.w500
+                    ),
+                    ),
+                  ],
+                ),
+              ) : _isLocationLoaded ? Container(
+                width: double.infinity,
+                height: 36,
+                child: Center(
+                  child: CircularProgressIndicator(color: MyColors.primary,),
+                ),
+              ) :Text(''),
+              Container(height: 35),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 57,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColors.primary,
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(_isEdditingMode ? Icons.update : Icons.add),
+                          SizedBox(width: 10),
+                          Text(
+                            _isEdditingMode ? 'Update Sales' : "Add Sale",
+                            style: MyText.subhead(context)!.copyWith(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          isAddingOrUpdating = true;
+                        });
+
+                        _isEdditingMode ? await _updateSales() : await _addSales();
+
+                        setState(() {
+                          isAddingOrUpdating = false;
+                        });
                       },
                     ),
                   ),
-                  Padding(
-                    padding:  EdgeInsets.only(bottom: 10.0),
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10),
-                      height: 47,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: MyColors.textColor1,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          items: _custName.map<DropdownMenuItem<String>>((dynamic items) {
-                            return DropdownMenuItem<String>(
-                              alignment: AlignmentDirectional.centerStart,
-                              value: items.toString(),
-                              child: Container(
-                                width: double.maxFinite,
-                                    decoration: BoxDecoration(
-                                         border: Border(
-                                           bottom: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
-                                         ),
-                                    ),
-                                child: Text(
-                                  items.toString(),
-                                  style: MyText.body1(context)!.copyWith(
-                                      color: MyColors.textColor1,
-                                      fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          value: _isCustChanged ? _customernamecontroller : null, // Set value to null if _customernamecontroller is empty
-                          onChanged: (_customernamecontroller) {
-                            setState(() {
-                              this._customernamecontroller = _customernamecontroller;
-                              print('selected cust${_itemnamecontroller}');
-                              _isCustChanged = true;
-                            });
-                          },
-                          hint: Text(_isEdditingMode ? '${widget.customerName}' : 'Customer Name',
-                          style: MyText.body1(context)!.copyWith(
-                              color: MyColors.textColor1,
-                              fontWeight: FontWeight.w500
-                          ),
-                          ),
-                          isExpanded: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:  EdgeInsets.only(bottom: 10.0),
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10),
-                      height: 47,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: MyColors.textColor1,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                     child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          items:_itemsName.map<DropdownMenuItem<String>>((dynamic items) {
-                            return DropdownMenuItem<String>(
-                              value: items.toString(),
-                              child: Container(
-                                width: double.maxFinite,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
-                                  ),
-                                ),
-                                child: Text(
-                                  items.toString(),
-                                  style: MyText.body1(context)!.copyWith(
-                                      color: MyColors.textColor1,
-                                      fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          style: const TextStyle(
-                            color: Colors.grey,
-                          ),
-                          value: _isItemeChanged ? _itemnamecontroller : null,
-                          onChanged: ( _itemnamecontroller) {
-                            setState(() {
-                              this._itemnamecontroller = _itemnamecontroller;
-                              _isItemeChanged = true;
-                              print('item name ${this._itemnamecontroller}');
-                            });
-                          },
-                          hint: Text(_isEdditingMode ? '${_itemnamecontroller}' : 'Item Name',
-                            style: MyText.body1(context)!.copyWith(
-                                color: MyColors.textColor1,
-                                fontWeight: FontWeight.w500
-                            ),
-                          ),
-                          isExpanded: true,
-                        ),
-
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:  EdgeInsets.only(bottom: 10.0),
-                    child: TextField(
-                      controller: _quantitycontroller,
-                      obscureText: false,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.format_list_numbered , color: MyColors.iconColor,),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: MyColors.textColor1,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: MyColors.textColor1,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding: EdgeInsets.all(15),
-                        hintText: _isEdditingMode ? _quantitycontroller.text : 'Quantity' ,
-                        hintStyle: MyText.body1(context)!.copyWith(
-                            color: MyColors.textColor1,
-                            fontWeight: FontWeight.w500
-                        ),
-                      ),
-
-                      style: MyText.body1(context)!.copyWith(
-                        color: MyColors.textColor1,
-                        fontWeight: FontWeight.w500,
-                      ),
-
-                    ),
-                  ),
-                  Padding(
-                    padding:  EdgeInsets.only(bottom: 10.0),
-                    child: TextField(
-                      obscureText: false,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons. location_on, color: MyColors.iconColor,),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: MyColors.textColor1,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: MyColors.textColor1,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding: EdgeInsets.all(15),
-                        hintText: _isEdditingMode ? _locationcontroller : ((_latitude.isEmpty) ?  'Location' : '${_latitude},${_longtude}') ,
-                        hintStyle: MyText.body1(context)!.copyWith(
-                            color: MyColors.textColor1,
-                            fontWeight: FontWeight.w500
-                        ),
-                      ),
-
-                    ),
-                  ),
-
-                 _isEdditingMode ? GestureDetector(
-                    onTap: ()  {
-                      _getLocation().then((value){
-                        setState(() {
-                          _locationcontroller = '${_latitude},${_longtude}';
-                          _isLocationLoaded =false;
-                        });
-                      });
-                    },
-                    child: _isLocationLoaded ? Container(
-                      width: 500,
+                  SizedBox(height: 10,),
+                  if (isAddingOrUpdating)
+                    Container(
+                      width: double.infinity,
                       height: 36,
                       child: Center(
                         child: CircularProgressIndicator(color: MyColors.primary,),
                       ),
-                    ) :Row(
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            margin: EdgeInsets.only(left: 30),
-                            decoration: BoxDecoration(
-                              color: MyColors.textColor2,
-                              border: Border.all(width: 1, color:  MyColors.textColor1),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Icon(Icons.location_on_outlined, color: Colors.white ),
-                          ),
-                          SizedBox(width: 5,),
-                        Text('Update Location', style: MyText.body1(context)!.copyWith(
-                              color: MyColors.textColor1,
-                              fontWeight: FontWeight.w500
-                          ),
-                          ),
-                        ],
                     ),
-                  ) : _isLocationLoaded ? Container(
-                   width: double.infinity,
-                   height: 36,
-                   child: Center(
-                     child: CircularProgressIndicator(color: MyColors.primary,),
-                   ),
-                 ) :Text(''),
-                  Container(height: 35),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 57,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: MyColors.primary,
-                                elevation: 0,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(_isEdditingMode ? Icons.update : Icons.add),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    _isEdditingMode ? 'Update Sales' : "Add Sale",
-                                    style: MyText.subhead(context)!.copyWith(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  isAddingOrUpdating = true;
-                                });
-
-                                _isEdditingMode ? await _updateSales() : await _addSales();
-
-                                setState(() {
-                                  isAddingOrUpdating = false;
-                                });
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-                          if (isAddingOrUpdating)
-                           Container(
-                                width: double.infinity,
-                                height: 36,
-                                child: Center(
-                                  child: CircularProgressIndicator(color: MyColors.primary,),
-                                ),
-                              ),
-                        ],
-                      ),
-
                 ],
               ),
-            ),
+
+            ],
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

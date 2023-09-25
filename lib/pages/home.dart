@@ -10,6 +10,7 @@ import 'package:testing1213/pages/addCustomer.dart';
 import 'package:testing1213/pages/addSales.dart';
 import 'package:testing1213/pages/connectionError.dart';
 import 'package:testing1213/pages/viewCustomers.dart';
+import 'package:testing1213/service/services.dart';
 import 'package:testing1213/service/user_service.dart';
 import '../data/img.dart';
 import '../data/my_colors.dart';
@@ -65,13 +66,15 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           isLoggedOut = false;
         });
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: HomePage(),)));
+        snackBar.show(
+            context,"Something went wrong. Please try again", Colors.red);
       }
     }else{
       setState(() {
         isLoggedOut = false;
       });
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ConnectionError(routeWidget: HomePage(),)));
+      snackBar.show(
+          context,"Something went wrong. Please try again", Colors.red);
     }
   }
   List<String> slider = [
@@ -86,45 +89,11 @@ class _HomePageState extends State<HomePage> {
     'image_slider9.jpg',
     'image_slider10.jpg',
   ];
-  Future<bool> _onBackPressed(BuildContext context) async {
-    bool exitApp = await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Do you want to exit?',
-          style: MyText.body1(context)!.copyWith(
-              color: Colors.black,
-              letterSpacing: 1,
-              fontWeight: FontWeight.w400
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('No',
-              style: MyText.body2(context)!.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500
-              ),
-            ),
-            onPressed: () => Navigator.of(context).pop(false),
-          ),
-          TextButton(
-            child: Text('Yes',
-              style: MyText.body1(context)!.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500
-              ),
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-          ),
-        ],
-      ),
-    );
-    return exitApp ?? false;
-  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onBackPressed(context),
+      onWillPop: () => Services.onBackPressed(context),
       child: Scaffold(
         drawer: NavigationDrawerWidget(),
         appBar: AppBar(

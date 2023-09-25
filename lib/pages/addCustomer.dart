@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testing1213/pages/connectionError.dart';
 import 'package:testing1213/pages/viewCustomers.dart';
+import 'package:testing1213/service/services.dart';
 import 'package:testing1213/service/user_service.dart';
 import 'package:testing1213/widget/snackbar.dart';
 import '../data/my_colors.dart';
@@ -31,6 +32,7 @@ class _AddCustomerState extends State<AddCustomer> {
   String gender = 'male';
   bool _isLodding = false;
   bool _isEdditingMode = false;
+  String? _customer_id;
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -48,6 +50,7 @@ class _AddCustomerState extends State<AddCustomer> {
   }
   void setEdditingData() {
     if(_isEdditingMode){
+      _customer_id = widget.customer?['customer_id'];
       _fullNameController.text = widget.customer?['name'];
       _emailController.text = widget.customer?['email'];
       _phoneController.text = widget.customer?['phone_number'];
@@ -116,13 +119,15 @@ class _AddCustomerState extends State<AddCustomer> {
              setState(() {
                _isLodding =false;
            });
-           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) =>ConnectionError(routeWidget: AddCustomer(),)));
+             snackBar.show(
+                 context,"Something went wrong. Please try again", Colors.red);
          }
       }else{
         setState(() {
           _isLodding =false;
         });
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) =>ConnectionError(routeWidget: AddCustomer(),)));
+        snackBar.show(
+            context,"Something went wrong. Please try again", Colors.red);
       }
     }
   }
@@ -147,7 +152,7 @@ class _AddCustomerState extends State<AddCustomer> {
         'agent_id':user_id,
         'tin_number':_tinNumberController.text,
       });
-      ApiResponse updateCustomersResponse = await updateCustomers(body, token, user_id);
+      ApiResponse updateCustomersResponse = await updateCustomers(body, token, _customer_id);
       if(updateCustomersResponse.error == null){
         setState(() {
           _isLodding =false;
@@ -160,14 +165,16 @@ class _AddCustomerState extends State<AddCustomer> {
           _isLodding =false;
         });
         prefs.setBool('editcust', true);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) =>ConnectionError(routeWidget: AddCustomer(customer: widget.customer,),)));
+        snackBar.show(
+            context,"Something went wrong. Please try again", Colors.red);
       }
     }else{
       setState(() {
         _isLodding =false;
       });
       prefs.setBool('editcust', true);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) =>ConnectionError(routeWidget: AddCustomer(customer: widget.customer,),)));
+      snackBar.show(
+          context,"Something went wrong. Please try again", Colors.red);
     }
   }
   @override
@@ -539,10 +546,13 @@ class _AddCustomerState extends State<AddCustomer> {
                           ],
                         ),
                         onPressed: () async {
-                        setState(() {
-                          _isLodding =true;
-                        });
-                        _isEdditingMode ? updateCustomer() : addCustomer();
+                          setState(() {
+                            _isLodding =true;
+                          });
+                          _isEdditingMode ? updateCustomer() : addCustomer();
+                          setState(() {
+                            _isLodding =false;
+                          });
                         },
                       ),
                     ),
